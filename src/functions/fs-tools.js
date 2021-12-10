@@ -2,13 +2,13 @@ import fs from 'fs-extra'
 import { fileURLToPath } from 'url'
 import { join, dirname } from 'path'
 
-const { readFile, writeFile } = fs
+const { readJSON, writeJSON } = fs
 
 const dataFolderPath = join(dirname(fileURLToPath(import.meta.url)), '../data')
 const moviesJSONPath = join(dataFolderPath, 'movies.json')
 const reviewsJSONPath = join(dataFolderPath, 'reviews.json')
 
-export const getMovies = () => readFile(moviesJSONPath)
-export const writeMovie = content => writeFile(moviesJSONPath, content)
-export const getReviews = () => readFile(reviewsJSONPath)
-export const writeReview = content => writeFile(reviewsJSONPath, content)
+export const getMovies = () => readJSON(moviesJSONPath)
+export const writeMovie = content => writeJSON(moviesJSONPath, content)
+export const getReviews = () => readJSON(reviewsJSONPath)
+export const writeReview = content => writeJSON(reviewsJSONPath, content)

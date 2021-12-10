@@ -15,7 +15,10 @@ movieRouter.route('/')
 .post(async (req, res, next) => {
     try {
         const movies = await getMovies()
-        res.send(movies)
+        console.log(movies)
+        movies.push(req.body)
+        await writeMovie(movies)
+        res.status(201).send(req.body)
     } catch (error) {
         next(error)
     }
