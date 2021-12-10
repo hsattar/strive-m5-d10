@@ -1,10 +1,12 @@
 import express from "express"
 import createHttpError from "http-errors"
+import { validationResult } from "express-validator"
 import { getMovies, writeMovie, getReviews, writeReview } from "../functions/fs-tools.js"
+import { addingMovieValidation } from '../middleware/validation.js'
 
 const movieRouter = express.Router()
 
-const error404 = 'This Movie Does Not Exist'
+const error404 = 'This Movie Does Not Exist.'
 
 movieRouter.route('/')
 .get(async (req, res, next) => {
@@ -15,9 +17,13 @@ movieRouter.route('/')
         next(error)
     }
 })
-.post(async (req, res, next) => {
+.post(addingMovieValidation , async (req, res, next) => {
     try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) return next(createHttpError(400, errors))
         const movies = await getMovies()
+        const imdbCheck = movies.findIndex(movie => movie.imdbID === req.body.imdbID)
+        if (imdbCheck !== -1) return next(createHttpError(400, 'A movie with this imdbID has already been created.'))
         movies.push(req.body)
         await writeMovie(movies)
         res.status(201).send(req.body)
