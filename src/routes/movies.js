@@ -1,18 +1,21 @@
 import express from "express"
+import { getMovies, writeMovie, getReviews, writeReview } from "../functions/fs-tools.js"
 
 const movieRouter = express.Router()
 
 movieRouter.route('/')
 .get(async (req, res, next) => {
     try {
-        res.send('OK')
+        const movies = await getMovies()
+        res.send(movies)
     } catch (error) {
         next(error)
     }
 })
 .post(async (req, res, next) => {
     try {
-        res.send('OK')
+        const movies = await getMovies()
+        res.send(movies)
     } catch (error) {
         next(error)
     }
@@ -21,21 +24,24 @@ movieRouter.route('/')
 movieRouter.route('/:movieId')
 .get(async (req, res, next) => {
     try {
-        res.send('OK')
+        const movies = await getMovies()
+        res.send(movies)
     } catch (error) {
         next(error)
     }
 })
 .put(async (req, res, next) => {
     try {
-        res.send('OK')
+        const movies = await getMovies()
+        res.send(movies)
     } catch (error) {
         next(error)
     }
 })
 .delete(async (req, res, next) => {
     try {
-        res.send('OK')
+        const movies = await getMovies()
+        res.send(movies)
     } catch (error) {
         next(error)
     }
