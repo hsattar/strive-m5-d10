@@ -36,10 +36,12 @@ movieRouter.route('/')
     }
 })
 
-movieRouter.post('/search', async (req, res, next) => {
+movieRouter.get('/search', async (req, res, next) => {
     try {
         const movies = await getMovies()
-        // const movieResults = movies.filter()
+        const movieResults = movies.filter(movie => movie.Title.toLowerCase().includes(req.query.s.toLowerCase()))
+        if (movieResults.length !== 0) return res.send(movieResults)
+        res.send('searching omdb')
     } catch (error) {
         next(error)
     }
