@@ -61,7 +61,9 @@ movieRouter.route('/:movieId')
         const movies = await getMovies()
         const movie = movies.filter(movie => movie.imdbID === req.params.movieId)
         if (movie.length === 0) return next(createHttpError(404, moviesError404))
-        res.send(movie)
+        const reviews = await getReviews()
+        const movieReviews = reviews.filter(review => review.movieId === req.params.movieId)
+        res.send({ movie, movieReviews })
     } catch (error) {
         next(error)
     }
@@ -112,7 +114,6 @@ movieRouter.post('/:movieId/reviews', addReviewValidation, async (req, res, next
         if (!errors.isEmpty()) return next(createHttpError(400, errors))
         const movies = await getMovies()
         const movieExists = movies.findIndex(movie => movie.imdbID === req.params.movieId)
-        console.log(movieExists)
         if (movieExists === -1) return next(createHttpError(404, moviesError404))
         const reviews = await getReviews()
         const newReview = {
