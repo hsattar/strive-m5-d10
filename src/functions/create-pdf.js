@@ -23,7 +23,7 @@ export const generatePDF = async (movie, movieReviews) => {
         content: [
             { image: `data:image/jpeg;base64,${base64Image}`, margin: [0, 10] },
             { text: `${movie.Title}`, style: 'header', margin: [0, 20] },
-            `${movie.Plot}`,
+            `${movie.Year}`,
             { text: 'Reviews', style: 'subHeader', margin: [0, 20] },
             `${movieReviews.map(review => review.comment)}`
         ],
