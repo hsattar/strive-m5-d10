@@ -36,6 +36,15 @@ movieRouter.route('/')
     }
 })
 
+movieRouter.post('/search', async (req, res, next) => {
+    try {
+        const movies = await getMovies()
+        // const movieResults = movies.filter()
+    } catch (error) {
+        next(error)
+    }
+})
+
 movieRouter.get('/reviews', async (req, res, next) => {
     try {
         const reviews = await getReviews()
