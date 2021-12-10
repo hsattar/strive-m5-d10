@@ -58,4 +58,16 @@ movieRouter.route('/:movieId')
     }
 })
 
+movieRouter.patch('/:movieId/poster', async (req, res, next) => {   
+    try {
+        const movies = await getMovies()
+        const index = movies.findIndex(movie => movie.imdbID === req.params.movieId)
+        movies[index].Poster = req.body.Poster
+        await writeMovie(movies)
+        res.send(movies[index])
+    } catch (error) {
+        next(error)
+    }   
+})
+
 export default movieRouter
