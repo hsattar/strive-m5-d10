@@ -1,5 +1,5 @@
 import PdfPrinter from 'pdfmake'
-import fs from 'fs'
+import imageToBase64 from 'image-to-base64'
 
 const fonts = {
     Helvetica: {
@@ -8,8 +8,11 @@ const fonts = {
     }
   }
 
-export const generatePDF = (movie) => {
+export const generatePDF = async (movie, movieReviews) => {
     const printer = new PdfPrinter(fonts)
+
+    const base64Image = await imageToBase64(movie.Poster)
+    // console.log(base64Image)
   
     const docDefinition = {
         info: {
@@ -18,10 +21,11 @@ export const generatePDF = (movie) => {
             subject: 'Movie PDF',
             },
         content: [
-            {text: `${movie.Title}`, style: 'header', margin: [0, 20]},
-            'Year',
-            {text: 'Reviews', style: 'subHeader', margin: [0, 20]},
-            'blah blah'
+            { image: `data:image/jpeg;base64,${base64Image}`, margin: [0, 10] },
+            { text: `${movie.Title}`, style: 'header', margin: [0, 20] },
+            `${movie.Plot}`,
+            { text: 'Reviews', style: 'subHeader', margin: [0, 20] },
+            `${movieReviews.map(review => review.comment)}`
         ],
         styles: {
             header: {

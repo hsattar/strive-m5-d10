@@ -138,8 +138,9 @@ movieRouter.get('/:movieId/pdf', async (req, res, next) => {
         const movies = await getMovies()
         const movie = movies.filter(movie => movie.imdbID === req.params.movieId)
         if (movie.length === 0) return next(createHttpError(400, moviesError404))
-        console.log(movie)
-        const pdf = generatePDF(movie[0])
+        const reviews = await getReviews()
+        const movieReviews = reviews.filter(review => review.movieId === req.params.movieId)
+        const pdf = await generatePDF(movie[0], movieReviews)
         pdf.end()
         res.setHeader('Content-Disposition', `attachment; filename=${movie[0].Title}.pdf`)
         pipeline(pdf, res, err => {
