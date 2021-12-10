@@ -4,6 +4,8 @@ import { validationResult } from "express-validator"
 import { v4 as uuidv4 } from 'uuid'
 import { getMovies, writeMovie, getReviews, writeReview } from "../functions/fs-tools.js"
 import { addingMovieValidation, addReviewValidation } from '../middleware/validation.js'
+import { pipeline } from 'stream'
+import { generatePDF } from '../functions/create-pdf.js'
 
 const movieRouter = express.Router()
 
@@ -128,6 +130,24 @@ movieRouter.post('/:movieId/reviews', addReviewValidation, async (req, res, next
         res.status(201).send(newReview)
     } catch (error) {
         next(error)
+    }
+})
+
+movieRouter.get('/:movieId/pdf', async (req, res, next) => {
+    try {
+        const movies = await getMovies()
+        const movie = movies.filter(movie => movie.imdbID === req.params.movieId)
+        if (movie.length === 0) return next(createHttpError(400, moviesError404))
+        console.log(movie)
+        const pdf = generatePDF(movie[0])
+        pdf.end()
+        res.setHeader('Content-Disposition', `attachment; filename=${movie[0].Title}.pdf`)
+        pipeline(pdf, res, err => {
+            if (err) console.log(err)
+        })
+    } catch (error) {
+        next(error)
+        console.log(error)
     }
 })
 
