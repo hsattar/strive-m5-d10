@@ -1,5 +1,6 @@
 import express from "express"
 import createHttpError from "http-errors"
+import fetch from "node-fetch"
 import { validationResult } from "express-validator"
 import { v4 as uuidv4 } from 'uuid'
 import { getMovies, writeMovie, getReviews, writeReview } from "../functions/fs-tools.js"
@@ -41,7 +42,12 @@ movieRouter.get('/search', async (req, res, next) => {
         const movies = await getMovies()
         const movieResults = movies.filter(movie => movie.Title.toLowerCase().includes(req.query.s.toLowerCase()))
         if (movieResults.length !== 0) return res.send(movieResults)
-        res.send('searching omdb')
+        const response = await fetch(`https://hs-omdb-proxy.herokuapp.com/omdb?s=${req.query.s}`)
+        const data = await response.json()
+        const newMovies = data.Search
+        newMovies.forEach(movie => movies.push(movie))
+        await writeMovie(movies)
+        res.send(newMovies)
     } catch (error) {
         next(error)
     }
