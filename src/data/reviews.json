@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "8b900740-3723-49cd-a1e9-b193fa0da9a8",
+    "comment": "A good book but definitely I don't like many parts of the plot",
+    "rating": 3,
+    "movieId": "tt0120737",
+    "createdAt": "2021-12-10T12:29:15.278Z",
+    "updatedAt": "2021-12-10T12:29:15.278Z"
+  }
+]

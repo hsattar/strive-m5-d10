@@ -7,3 +7,8 @@ export const addingMovieValidation = [
     body('Type').exists().isLength({ min: 1 }).withMessage('Type is required'),
     body('Poster').exists().isLength({ min: 1 }).withMessage('Poster is required')
 ]
+
+export const addReviewValidation = [
+    body('comment').exists().isLength({ min: 1 }).withMessage('A comment is required'),
+    body('rating').exists().isLength({ min: 1, max: 1 }).withMessage('A rating is required')
+]
